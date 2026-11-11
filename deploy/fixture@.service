@@ -1,0 +1,22 @@
+[Unit]
+Description=Gateway synthetic provider %i
+After=network.target
+
+[Service]
+User=gatewayfixture
+Group=gatewayfixture
+EnvironmentFile=/etc/llm-gateway/fixture-%i.env
+ExecStart=/opt/llm-gateway/current/gateway fixture -listen ${LISTEN} -mode ${MODE}
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+CapabilityBoundingSet=
+MemoryMax=96M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

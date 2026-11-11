@@ -1,0 +1,30 @@
+[Unit]
+Description=Go LLM gateway
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=gatewaylab
+Group=gatewaylab
+WorkingDirectory=/var/lib/llm-gateway
+Environment="GATEWAY_DATABASE_URL=host=/var/run/postgresql dbname=llmgateway user=gatewaylab sslmode=disable"
+EnvironmentFile=-/etc/llm-gateway/provider.env
+ExecStart=/opt/llm-gateway/current/gateway serve -config /etc/llm-gateway/gateway.json
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/llm-gateway
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryMax=512M
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target

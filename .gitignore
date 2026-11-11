@@ -1,0 +1,17 @@
+/.lab/
+/bin/
+/dist/
+/.env
+/.env.*
+*.env
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.csr
+*.srl
+*.log
+__pycache__/
+*.pyc
+*.local.json

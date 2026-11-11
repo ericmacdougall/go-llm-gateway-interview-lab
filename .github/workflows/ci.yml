@@ -2,7 +2,7 @@ name: Gateway CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, codex/publication-prep]
   workflow_dispatch:
 permissions:
   contents: read

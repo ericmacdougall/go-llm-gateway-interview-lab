@@ -124,7 +124,7 @@ Multiple replicas sharing a database/key pin one PostgreSQL connection for a ses
 
 ## Signed audit and key continuity
 
-The ledger serializes its head row, assigns sequence numbers, hashes canonical event bytes and the previous digest with SHA-256, signs using Ed25519 and commits the append/head with the accounting mutation. Startup checks expected signing-key continuity and verifies existing history before serving.
+The ledger serializes its head row, assigns sequence numbers, hashes stored serialized event bytes and the previous digest with SHA-256, signs using Ed25519 and commits the append/head with the accounting mutation. Startup checks expected signing-key continuity and verifies existing history before serving.
 
 A signature is not encryption or immutable storage. The runtime role owns these tables. A consistent rollback of chain and head can evade detection without an independent retained checkpoint. Preserve the signing key across releases; replacing it breaks verification. Cloud KMS envelope/key-history management, independent anchors and key-compromise recovery are not implemented here.
 

@@ -49,7 +49,7 @@ Required package `example.com/llmgateway/integration/lockwire`:
 
 - `TestLostUnlockReplyRetiresSession`: PostgreSQL executes unlock, a wire proxy withholds the response, and the ambiguous pinned connection is retired so another worker can acquire.
 - `TestUnlockHookErrorDiscardsLiveLockSession`: unsuccessful cleanup cannot return a session with uncertain lock state to the pool.
-- `TestLockBackendLossCancelsActiveScan`: backend loss cancels active work and permits takeover; duplicate candidate processing still cannot double settle.
+- `TestLockBackendLossCancelsActiveScan`: backend loss cancels active work and permits takeover. Financial idempotence is asserted separately by real PostgreSQL ledger/reconciliation tests; this lockwire test does not combine backend termination with settlement.
 
 The remaining packages also execute once, including direct OpenAI/Anthropic/OpenRouter protocol adapters, buffered streaming behavior, policy, mTLS identity binding, terminal safety refusal, protected routes and device continuity. Requiring a selected set of database tests is an additional guard, not a replacement for all-package execution. A race-detector pass means the exercised paths had no detected race; it proves no throughput or latency number.
 

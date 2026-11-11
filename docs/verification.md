@@ -32,6 +32,8 @@ The smoke proves authenticated success, policy denial, insufficient-budget denia
 
 A disposable unformatted Go file must make `scripts/ci.sh check` fail before tests/build. Remove only that control, then check the clean source. For changes to transaction predicates, authorization or physical session cleanup, introduce a controlled broken copy in an isolated checkout and confirm the corresponding focused assertion fails. Never weaken the required gate, run tests against a real client's database, or publish lab keys/logs.
 
+`python3 scripts/test_staging_helpers.py` is a portable standard-library check run by the CI `check` mode. It rejects missing/wrong hostname, malformed or non-unicast addresses and injected certificate-extension text before mutation utilities or credentials; validates loopback/explicit address, generated SAN text and example identities; preserves existing configuration; rejects mismatched probe listeners and missing model names. Filesystem/credential access is virtual and privileged utilities are sentinels. It is not an actual OS installation or certificate-issuance test.
+
 A missing `GATEWAY_TEST_DSN` can make direct integration test invocations skip. The CI entry point prevents vacuous success by creating its own database and checking exact JSON package/test PASS pairs. Generic `PASS` text is insufficient.
 
 ## Staging verification is separate

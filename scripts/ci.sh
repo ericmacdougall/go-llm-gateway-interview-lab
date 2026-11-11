@@ -15,7 +15,7 @@ source_fingerprint() {
 from pathlib import Path
 import hashlib
 files = [Path(p) for p in ('go.mod','go.sum','README.md','.gitignore','.github/workflows/ci.yml')]
-for directory, suffixes in {'cmd':{'.go','.sql'}, 'internal':{'.go','.sql'}, 'integration':{'.go','.sql'}, 'scripts':{'.sh'}, 'deploy':{'.sh','.py','.service'}, 'docs':{'.md'}}.items():
+for directory, suffixes in {'cmd':{'.go','.sql'}, 'internal':{'.go','.sql'}, 'integration':{'.go','.sql'}, 'scripts':{'.sh','.py'}, 'deploy':{'.sh','.py','.service'}, 'docs':{'.md'}}.items():
     files.extend(p for p in Path(directory).rglob('*') if p.is_file() and p.suffix in suffixes)
 if any(p.is_symlink() for p in files): raise SystemExit('Source symlink rejected')
 body = ''.join(p.as_posix()+'\0'+hashlib.sha256(p.read_bytes()).hexdigest()+'\n' for p in sorted(files))
@@ -39,6 +39,7 @@ for p in sorted(Path('deploy').glob('*.py')):
     compile(p.read_bytes(), str(p), 'exec')  # No __pycache__ written into source.
 print('Deployment Python syntax passed')
 PY
+  python3 scripts/test_staging_helpers.py
   if command -v actionlint >/dev/null; then
     actionlint .github/workflows/ci.yml
   else
@@ -114,7 +115,7 @@ def allowed(name):
     p = Path(name)
     return (name in {'go.mod', 'go.sum', 'README.md', '.gitignore'} or
         (p.parts[0] in {'cmd', 'internal', 'integration'} and p.suffix in {'.go', '.sql'}) or
-        (p.parts[0] == 'scripts' and p.suffix == '.sh') or
+        (p.parts[0] == 'scripts' and p.suffix in {'.sh', '.py'}) or
         (p.parts[0] == 'deploy' and p.suffix in {'.py', '.sh', '.service'}) or
         (p.parts[0] == 'docs' and p.suffix == '.md') or
         name == '.github/workflows/ci.yml')
